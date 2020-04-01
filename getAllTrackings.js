@@ -1,7 +1,7 @@
 const fs = require("fs");
 const filterTrackings = require("./modules/filterEventsObjects");
 const yargs = require("yargs");
-const exportFile = require('./modules/exportFile')
+const exf = require("./modules/exportFile");
 const argv = yargs
   .option("read", {
     alias: "r",
@@ -27,8 +27,18 @@ const outputType = argv.o;
 
 var getAllTrackings = function() {
   try {
-    var file = fs.readFileSync(readPath);
-    var flow = JSON.parse(file);
+    
+    try {
+      var file = fs.readFileSync(readPath);
+    } catch (e) {
+      return console.log("ERROR: Can't read input file".toUpperCase());
+    }
+
+    try {
+      var flow = JSON.parse(file);
+    } catch (e) {
+      return console.log("ERROR: Can't parse json".toUpperCase());
+    }
     var trackEvents = [];
 
     for (const i in flow) {
@@ -49,7 +59,7 @@ var getAllTrackings = function() {
       }
     }
 
-    exportFile.exportFile(writePath, trackEvents, outputType)
+    exf.exportFile(writePath, trackEvents, outputType);
   } catch (e) {
     console.log(e);
   }
