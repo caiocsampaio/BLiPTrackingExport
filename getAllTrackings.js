@@ -1,9 +1,12 @@
+const fs = require("fs");
+const handler = require("./modules/eventObjectHandler");
+const argv = require("yargs").argv;
+const readPath = argv.r;
+const writePath = argv.w;
+const outputType = argv.o;
+
 var getAllTrackings = function() {
   try {
-    var fs = require("fs");
-    var handler = require("./modules/eventObjectHandler");
-    var readPath = process.argv[2];
-    var writePath = process.argv[3];
     var file = fs.readFileSync(readPath);
     var flow = JSON.parse(file);
     var trackEvents = [];
@@ -19,7 +22,10 @@ var getAllTrackings = function() {
         });
 
         if (enterTrackings.length > 0) {
-          enteringCustomActions = handler.createTrackingEventObj(enterTrackings, 0);
+          enteringCustomActions = handler.createTrackingEventObj(
+            enterTrackings,
+            0
+          );
         }
 
         var outTrackings = block.$leavingCustomActions.filter(a => {
@@ -27,7 +33,10 @@ var getAllTrackings = function() {
         });
 
         if (outTrackings.length > 0) {
-          leavingCustomActions = handler.createTrackingEventObj(outTrackings, 1);
+          leavingCustomActions = handler.createTrackingEventObj(
+            outTrackings,
+            1
+          );
         }
 
         var events = enteringCustomActions.concat(leavingCustomActions);
@@ -50,6 +59,6 @@ var getAllTrackings = function() {
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 getAllTrackings();
