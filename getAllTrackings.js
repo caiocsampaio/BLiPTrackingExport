@@ -1,7 +1,6 @@
-const fs = require("fs");
 const filterTrackings = require("./modules/filterEventsObjects");
 const yargs = require("yargs");
-const exf = require("./modules/exportFile");
+const fileHandler = require("./modules/fileHandler");
 const argv = yargs
   .option("read", {
     alias: "r",
@@ -27,9 +26,8 @@ const outputType = argv.o;
 
 var getAllTrackings = function() {
   try {
-    
     try {
-      var file = fs.readFileSync(readPath);
+      var file = fileHandler.readFile(readPath);
     } catch (e) {
       return console.log("ERROR: Can't read input file".toUpperCase());
     }
@@ -59,7 +57,7 @@ var getAllTrackings = function() {
       }
     }
 
-    exf.exportFile(writePath, trackEvents, outputType);
+    fileHandler.exportFile(writePath, trackEvents, outputType);
   } catch (e) {
     console.log(e);
   }

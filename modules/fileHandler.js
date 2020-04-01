@@ -1,3 +1,8 @@
+const fs = require("fs");
+
+exports.readFile = function (readPath) {
+  return fs.readFileSync(readPath);
+}
 exports.exportFile = function(writePath, trackEvents, fileType) {
   if (writePath) {
     switch (fileType) {
