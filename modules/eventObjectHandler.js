@@ -1,4 +1,4 @@
-exports.createTrackingEventObj = function(trackings, typeIdx) {
+exports.createTrackingEventObj = function (trackings, typeIdx) {
   var actionTypes = ["entering", "leaving"];
   var type = actionTypes[typeIdx];
   var customActions = [];

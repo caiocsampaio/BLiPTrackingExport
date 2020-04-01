@@ -1,6 +1,26 @@
 const fs = require("fs");
-const handler = require("./modules/eventObjectHandler");
-const argv = require("yargs").argv;
+const filterTrackings = require("./modules/filterEventsObjects");
+const yargs = require("yargs");
+const exportFile = require('./modules/exportFile')
+const argv = yargs
+  .option("read", {
+    alias: "r",
+    description: "Input json path",
+    type: "string"
+  })
+  .option("write", {
+    alias: "w",
+    description: "Output file path, if wanted",
+    type: "string"
+  })
+  .option("output", {
+    alias: "o",
+    description: "Output file type: json or csv",
+    type: "string"
+  })
+  .help()
+  .alias("help", "h").argv;
+
 const readPath = argv.r;
 const writePath = argv.w;
 const outputType = argv.o;
@@ -17,27 +37,8 @@ var getAllTrackings = function() {
         var leavingCustomActions = [];
         const block = flow[i];
 
-        var enterTrackings = block.$enteringCustomActions.filter(a => {
-          return a.type == "TrackEvent";
-        });
-
-        if (enterTrackings.length > 0) {
-          enteringCustomActions = handler.createTrackingEventObj(
-            enterTrackings,
-            0
-          );
-        }
-
-        var outTrackings = block.$leavingCustomActions.filter(a => {
-          return a.type == "TrackEvent";
-        });
-
-        if (outTrackings.length > 0) {
-          leavingCustomActions = handler.createTrackingEventObj(
-            outTrackings,
-            1
-          );
-        }
+        enteringCustomActions = filterTrackings.filterEventsObjects(block, 0);
+        leavingCustomActions = filterTrackings.filterEventsObjects(block, 1);
 
         var events = enteringCustomActions.concat(leavingCustomActions);
 
@@ -48,14 +49,7 @@ var getAllTrackings = function() {
       }
     }
 
-    if (writePath) {
-      fs.writeFileSync(writePath, JSON.stringify(trackEvents), {
-        encoding: "utf8",
-        flag: "w+"
-      });
-    } else {
-      console.log(JSON.stringify(trackEvents));
-    }
+    exportFile.exportFile(writePath, trackEvents, outputType)
   } catch (e) {
     console.log(e);
   }
