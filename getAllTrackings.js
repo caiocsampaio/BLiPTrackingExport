@@ -21,10 +21,8 @@ const argv = yargs
   .alias("help", "h").argv;
 
 var readPath = argv.r;
-const writePath = argv.w;
-const outputType = argv.o;
-
-readPath = "D:\\Users\\caiosp\\projetos\\Claro\\Célula Bravo\\Claro Suporte Movel\\claroproblemadesinal.json"
+var writePath = argv.w;
+var outputType = argv.o;
 
 var getAllTrackings = function() {
   try {
