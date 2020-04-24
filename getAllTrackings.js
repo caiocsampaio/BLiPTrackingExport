@@ -20,9 +20,9 @@ const argv = yargs
   .help()
   .alias("help", "h").argv;
 
-var readPath = argv.r;
-var writePath = argv.w;
-var outputType = argv.o;
+const readPath = argv.r;
+const writePath = argv.w;
+const outputType = argv.o;
 
 var getAllTrackings = function() {
   try {
@@ -41,12 +41,10 @@ var getAllTrackings = function() {
 
     for (const i in flow) {
       if (flow.hasOwnProperty(i)) {
-        var enteringCustomActions = [];
-        var leavingCustomActions = [];
         const block = flow[i];
 
-        enteringCustomActions = filterTrackings.filterEventsObjects(block, 0);
-        leavingCustomActions = filterTrackings.filterEventsObjects(block, 1);
+        var enteringCustomActions = filterTrackings.filterEventsObjects(block, 0);
+        var leavingCustomActions = filterTrackings.filterEventsObjects(block, 1);
 
         var events = enteringCustomActions.concat(leavingCustomActions);
 
@@ -58,6 +56,7 @@ var getAllTrackings = function() {
     }
 
     fileHandler.exportFile(writePath, trackEvents, outputType);
+    console.log("PROCESSO CONCLUÍDO")
   } catch (e) {
     console.log(e);
   }
